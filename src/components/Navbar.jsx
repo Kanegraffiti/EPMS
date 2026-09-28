@@ -15,7 +15,7 @@ import {
 import { NavLink, Link, useLocation } from "react-router-dom";
 
 import logo from "../assets/logo.png";
-
+import { useNavigate } from "react-router-dom";
 const Navbar = () => {
   const location = useLocation();
 
@@ -59,6 +59,17 @@ const Navbar = () => {
   const closeMenu = () => {
     setMenuOpen(false);
   };
+  const navigate = useNavigate();
+
+  // const handleLogout = () => {
+  //   localStorage.removeItem("epmsLoggedInUser");
+
+  //   setLoggedInUser(null);
+  //   setUserMenuOpen(false);
+  //   setMenuOpen(false);
+
+  //   window.location.href = "/login";
+  // };
 
   const handleLogout = () => {
     localStorage.removeItem("epmsLoggedInUser");
@@ -67,7 +78,7 @@ const Navbar = () => {
     setUserMenuOpen(false);
     setMenuOpen(false);
 
-    window.location.href = "/login";
+    navigate("/login");
   };
 
   return (
