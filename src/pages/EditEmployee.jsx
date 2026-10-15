@@ -1,201 +1,60 @@
-import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import EmployeeForm from "../components/EmployeeForm";
+import { notify } from "../utils/notify";
 
-const EditEmployee = ({ employees, setEmployees }) => {
+const EditEmployee = ({ employees, updateEmployee, departments }) => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const employee = employees.find((item) => item.id === id);
 
-  const employee = employees.find((employee) => employee.id === id);
+  const handleSave = (formData) => {
+    if (!updateEmployee(id, formData)) {
+      return false;
+    }
 
-  const [formData, setFormData] = useState({
-    name: employee?.name || "",
-    email: employee?.email || "",
-    phone: employee?.phone || "",
-    position: employee?.position || "",
-    department: employee?.department || "",
-    status: employee?.status || "Active",
-  });
-
-  if (!employee) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <h1 className="text-2xl font-bold text-red-600">Employee Not Found</h1>
-      </div>
-    );
-  }
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    setEmployees((currentEmployees) =>
-      currentEmployees.map((employee) =>
-        employee.id === id
-          ? {
-              ...employee,
-              ...formData,
-            }
-          : employee,
-      ),
-    );
-
-    // After saving, go to the employee profile
-    // and remember that we came from Manage Employees.
-    navigate(`/employees/${id}`, {
-      state: {
-        from: "/manage-employees",
-      },
-    });
+    notify(`${formData.name}'s changes have been saved.`);
+    navigate(`/employees/${id}`, { state: { from: "/manage-employees" } });
+    return true;
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 px-6 py-10">
-      <div className="max-w-3xl mx-auto">
-        {/* Back Button */}
-        <button
-          onClick={() => navigate(`/employees/${id}`)}
-          className="mb-6 text-green-700 font-semibold hover:text-green-800"
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+      <Navbar />
+
+      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
+        <Link
+          to="/manage-employees"
+          className="text-green-700 dark:text-green-400 hover:underline"
         >
-          ← Back to Profile
-        </button>
+          ← Back to Manage Employees
+        </Link>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-          <h1 className="text-3xl font-bold text-gray-900">Edit Employee</h1>
+        {employee ? (
+          <>
+            <h1 className="text-3xl font-bold mt-6">Edit employee</h1>
+            <p className="text-gray-500 dark:text-gray-400 mt-2">
+              Update {employee.name}'s profile.
+            </p>
 
-          <p className="text-gray-500 mt-1 mb-8">
-            Update employee information below.
-          </p>
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Full Name */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Full Name
-              </label>
-
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-3
-                           focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
+            <section className="mt-7 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow-sm p-5 sm:p-8">
+              <EmployeeForm
+                key={employee.id}
+                employee={employee}
+                departments={departments}
+                onSave={handleSave}
+                onCancel={() => navigate(`/employees/${id}`)}
+                actionLabel="Save changes"
               />
-            </div>
-
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Email
-              </label>
-
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-3
-                           focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
-            </div>
-
-            {/* Phone */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Phone
-              </label>
-
-              <input
-                type="text"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-3
-                           focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
-            </div>
-
-            {/* Position */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Position
-              </label>
-
-              <input
-                type="text"
-                name="position"
-                value={formData.position}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-3
-                           focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
-            </div>
-
-            {/* Department */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Department
-              </label>
-
-              <select
-                name="department"
-                value={formData.department}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-3
-                           focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              >
-                <option value="">Select Department</option>
-                <option value="Engineering">Engineering</option>
-                <option value="Human Resources">Human Resources</option>
-                <option value="Design">Design</option>
-                <option value="Finance">Finance</option>
-                <option value="Marketing">Marketing</option>
-              </select>
-            </div>
-
-            {/* Status */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Status
-              </label>
-
-              <select
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-3
-                           focus:outline-none focus:ring-2 focus:ring-green-500"
-              >
-                <option value="Active">Active</option>
-                <option value="On Leave">On Leave</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div>
-
-            {/* Save Button */}
-            <button
-              type="submit"
-              className="w-full bg-green-700 text-white py-3 rounded-lg
-                         font-semibold hover:bg-green-800 transition"
-            >
-              Save Changes
-            </button>
-          </form>
-        </div>
-      </div>
+            </section>
+          </>
+        ) : (
+          <div className="mt-12 text-center">
+            <h1 className="text-2xl font-bold">Employee not found</h1>
+            <p className="mt-2 text-gray-500">This employee may have been removed.</p>
+          </div>
+        )}
+      </main>
     </div>
   );
 };

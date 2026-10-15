@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import ScrollReveal from "../components/ScrollReveal";
 import { Link } from "react-router-dom";
@@ -16,32 +15,16 @@ import {
   ShieldCheck,
   Smartphone,
   Database,
-  Moon,
-  Sun,
 } from "lucide-react";
 
 const Features = () => {
-  // Dark / Light Mode
-  const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem("epmsDarkMode") === "true";
-  });
-
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("epmsDarkMode", "true");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("epmsDarkMode", "false");
-    }
-  }, [darkMode]);
 
   const features = [
     {
       icon: Users,
       title: "Employee Directory",
       description:
-        "Access a centralized directory containing employee records, departments, positions, contact details, and employment status.",
+        "Explore a browser-based directory containing employee records, departments, positions, contact details, and employment status.",
     },
     {
       icon: Search,
@@ -95,7 +78,7 @@ const Features = () => {
       icon: Database,
       title: "Organized Data",
       description:
-        "Keep employee information structured and easy to access through a centralized management system.",
+        "Keep employee information structured and easy to access through this practice project.",
     },
     {
       icon: ShieldCheck,
@@ -115,23 +98,6 @@ const Features = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
       <Navbar />
 
-      {/* THEME TOGGLE */}
-      <button
-        type="button"
-        onClick={() => setDarkMode(!darkMode)}
-        className="fixed top-24 right-5 z-40
-                   p-2.5 rounded-full
-                   bg-white dark:bg-gray-800
-                   border border-gray-200 dark:border-gray-700
-                   text-gray-600 dark:text-gray-300
-                   hover:bg-green-50 dark:hover:bg-gray-700
-                   hover:text-green-700 dark:hover:text-green-400
-                   shadow-sm transition-all duration-200"
-        aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
-        title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
-      >
-        {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-      </button>
 
       {/* HERO SECTION */}
       <section className="bg-gradient-to-br from-green-950 via-green-900 to-green-700 text-white">

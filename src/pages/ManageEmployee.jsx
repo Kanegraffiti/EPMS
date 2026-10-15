@@ -1,7 +1,47 @@
+import { useRef, useState } from "react";
+import EmployeeAvatar from "../components/EmployeeAvatar";
+import { employeesToCSV, downloadFile } from "../utils/csvEmployees";
+import { notify } from "../utils/notify";
 import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
 
-const ManageEmployee = ({ employees, setEmployees }) => {
+const ManageEmployee = ({ employees, deleteEmployee, importCSV }) => {
+  const fileInput = useRef(null);
+  const [importStatus, setImportStatus] = useState("");
+
+  const handleImport = async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    try {
+      if (file.size > 2 * 1024 * 1024) {
+        throw new Error("CSV must be smaller than 2 MB.");
+      }
+
+      const result = importCSV(await file.text());
+      const message = `Imported ${result.added} employee(s); skipped ${result.skipped} existing emails.`;
+      setImportStatus(message);
+      notify(message);
+    } catch (error) {
+      setImportStatus(error.message);
+      notify(error.message, "error");
+    } finally {
+      event.target.value = "";
+    }
+  };
+
+  const handleExportJSON = () => {
+    downloadFile(JSON.stringify(employees, null, 2), "EPMS-employees.json", "application/json");
+    notify("Employee records exported.");
+  };
+
+  const handleExportCSV = () => {
+    downloadFile("\uFEFF" + employeesToCSV(employees), "EPMS-employees.csv", "text/csv;charset=utf-8");
+    notify("CSV exported.");
+  };
+
   const handleDelete = (id) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this employee?",
@@ -11,9 +51,8 @@ const ManageEmployee = ({ employees, setEmployees }) => {
       return;
     }
 
-    setEmployees((currentEmployees) =>
-      currentEmployees.filter((employee) => employee.id !== id),
-    );
+    deleteEmployee(id);
+    notify("Employee removed.");
   };
 
   return (
@@ -33,7 +72,7 @@ const ManageEmployee = ({ employees, setEmployees }) => {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             {/* Back Button */}
             <Link
               to="/dashboard"
@@ -46,6 +85,35 @@ const ManageEmployee = ({ employees, setEmployees }) => {
               ← Back
             </Link>
 
+            <button
+              type="button"
+              onClick={handleExportJSON}
+              className="border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 px-4 py-3 rounded-lg font-semibold hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              Export JSON
+            </button>
+            <button
+              type="button"
+              onClick={handleExportCSV}
+              className="border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 px-4 py-3 rounded-lg font-semibold hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              Export CSV
+            </button>
+            <input
+              ref={fileInput}
+              type="file"
+              accept=".csv,text/csv"
+              onChange={handleImport}
+              aria-label="Import employees CSV"
+              className="sr-only"
+            />
+            <button
+              type="button"
+              onClick={() => fileInput.current?.click()}
+              className="border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 px-4 py-3 rounded-lg font-semibold hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              Import CSV
+            </button>
             {/* Add Employee Button */}
             <Link
               to="/addemployee"
@@ -57,6 +125,11 @@ const ManageEmployee = ({ employees, setEmployees }) => {
           </div>
         </div>
 
+        {importStatus && (
+          <p role="status" className="mb-5 text-sm text-green-700 dark:text-green-400">
+            {importStatus}
+          </p>
+        )}
         {/* Employee Count */}
         <div
           className="bg-white dark:bg-gray-900
@@ -88,6 +161,15 @@ const ManageEmployee = ({ employees, setEmployees }) => {
             </p>
           </div>
 
+          {employees.length === 0 && (
+            <div className="p-10 text-center text-gray-600 dark:text-gray-300">
+              No employees yet. Select{" "}
+              <Link to="/addemployee" className="font-semibold text-green-700 dark:text-green-400 underline">
+                Add Employee
+              </Link>{" "}
+              to create one.
+            </div>
+          )}
           {/* Desktop Table */}
           <div className="hidden md:block overflow-x-auto">
             <table className="w-full">
@@ -130,10 +212,7 @@ const ManageEmployee = ({ employees, setEmployees }) => {
                     {/* Employee */}
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <img
-                          src={employee.image || "/avatar.jpg"}
-                          alt={employee.name}
-                          className="w-10 h-10 rounded-full object-cover
+                        <EmployeeAvatar employee={employee} className="w-10 h-10 rounded-full object-cover
                                      border-2 border-green-200 dark:border-green-700"
                         />
 
@@ -231,10 +310,7 @@ const ManageEmployee = ({ employees, setEmployees }) => {
             {employees.map((employee) => (
               <div key={employee.id} className="p-5">
                 <div className="flex items-center gap-3 mb-4">
-                  <img
-                    src={employee.image || "/avatar.jpg"}
-                    alt={employee.name}
-                    className="w-12 h-12 rounded-full object-cover
+                  <EmployeeAvatar employee={employee} className="w-12 h-12 rounded-full object-cover
                                border-2 border-green-200 dark:border-green-700"
                   />
 

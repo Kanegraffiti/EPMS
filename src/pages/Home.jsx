@@ -1,4 +1,5 @@
 import Navbar from "../components/Navbar";
+import { getLoggedInUser } from "../utils/demoAuth";
 import ScrollReveal from "../components/ScrollReveal";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -17,7 +18,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleProtectedNavigation = (path) => {
-    const loggedInUser = localStorage.getItem("epmsLoggedInUser");
+    const loggedInUser = getLoggedInUser();
 
     if (loggedInUser) {
       navigate(path);
@@ -339,7 +340,7 @@ const Home = () => {
                            text-gray-600
                            dark:text-gray-400"
                     >
-                      Centralized records
+                      One-browser records
                     </span>
                   </div>
 
@@ -362,7 +363,7 @@ const Home = () => {
                            text-gray-600
                            dark:text-gray-400"
                     >
-                      Secure access
+                      Simple access
                     </span>
                   </div>
                 </div>
@@ -912,7 +913,7 @@ const Home = () => {
                            text-gray-900
                            dark:text-white"
                     >
-                      Organized & Secure
+                      Organized & Accessible
                     </p>
                   </div>
                 </div>
@@ -1107,7 +1108,7 @@ const Home = () => {
                 </div>
 
                 <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mt-6">
-                  Centralized Records
+                  Organized Profiles
                 </h3>
 
                 <p className="text-gray-600 dark:text-gray-400 mt-3 leading-relaxed">
@@ -1471,164 +1472,3 @@ const Home = () => {
 };
 
 export default Home;
-
-//  <section className="bg-gradient-to-br from-green-950 via-green-900 to-green-700 text-white overflow-hidden">
-//       <div className="max-w-7xl mx-auto px-6 py-20 md:py-28">
-//         <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
-
-//           <ScrollReveal>
-//             <div>
-//               <p className="text-green-300 font-semibold uppercase tracking-widest">
-//                 Welcome to EPMS
-//               </p>
-
-//               <h1 className="text-4xl md:text-6xl font-bold leading-tight mt-4">
-//                 Manage your workforce.
-//                 <span className="block text-green-300">
-//                   Simplify your workplace.
-//                 </span>
-//               </h1>
-
-//               <p className="text-green-100 text-lg md:text-xl mt-6 leading-relaxed max-w-xl">
-//                 EPMS is a modern Employee Profile Management System designed
-//                 to help organizations organize, search, view, and manage
-//                 employee information from one central platform.
-//               </p>
-
-//               <div className="flex flex-col sm:flex-row gap-4 mt-8">
-//                 <Link
-//                   to="/login"
-//                   className="inline-flex items-center justify-center gap-2
-//                              bg-white text-green-900 px-6 py-3 rounded-lg
-//                              font-semibold hover:bg-green-50
-//                              hover:-translate-y-1 transition-all duration-300"
-//                 >
-//                   Get Started
-//                   <ArrowRight size={18} />
-//                 </Link>
-
-//                 <button
-//                   className="inline-flex items-center justify-center
-//                              border border-green-300 text-white
-//                              px-6 py-3 rounded-lg font-semibold
-//                              hover:bg-green-800 hover:-translate-y-1
-//                              transition-all duration-300"
-//                   type="button"
-//                   onClick={() => handleProtectedNavigation("/employees")}
-//                 >
-//                   Explore Employees
-//                 </button>
-//               </div>
-//             </div>
-//           </ScrollReveal>
-
-//           <ScrollReveal delay={150}>
-//             <div className="relative">
-//               <div
-//                 className="absolute -top-10 -right-10 w-40 h-40
-//                            bg-green-400/20 rounded-full blur-3xl"
-//               ></div>
-
-//               <div
-//                 className="absolute -bottom-10 -left-10 w-40 h-40
-//                            bg-green-300/20 rounded-full blur-3xl"
-//               ></div>
-
-//               <div
-//                 className="relative bg-white/10 backdrop-blur-md
-//                            border border-white/20 rounded-3xl p-6
-//                            shadow-2xl"
-//               >
-
-//                 <div className="bg-white dark:bg-gray-900 rounded-2xl p-5 shadow-xl">
-//                   <div className="flex items-center justify-between">
-//                     <div>
-//                       <p className="text-xs text-gray-500 dark:text-gray-400">
-//                         EPMS Dashboard
-//                       </p>
-
-//                       <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mt-1">
-//                         Workforce Overview
-//                       </h2>
-//                     </div>
-
-//                     <div
-//                       className="w-11 h-11 bg-green-100
-//                                  text-green-700 rounded-xl
-//                                  flex items-center justify-center"
-//                     >
-//                       <LayoutDashboard size={22} />
-//                     </div>
-//                   </div>
-
-//                   <div className="grid grid-cols-2 gap-3 mt-5">
-//                     <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4">
-//                       <p className="text-xs text-gray-500 dark:text-gray-400">
-//                         Employees
-//                       </p>
-
-//                       <p className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">
-//                         120
-//                       </p>
-//                     </div>
-
-//                     <div className="bg-green-50 dark:bg-green-950/40 rounded-xl p-4">
-//                       <p className="text-xs text-green-700 dark:text-green-400">
-//                         Active
-//                       </p>
-
-//                       <p className="text-2xl font-bold text-green-700 dark:text-green-400 mt-1">
-//                         96
-//                       </p>
-//                     </div>
-
-//                     <div className="bg-yellow-50 dark:bg-yellow-950/40 rounded-xl p-4">
-//                       <p className="text-xs text-yellow-700 dark:text-yellow-400">
-//                         On Leave
-//                       </p>
-
-//                       <p className="text-2xl font-bold text-yellow-700 dark:text-yellow-400 mt-1">
-//                         12
-//                       </p>
-//                     </div>
-
-//                     <div className="bg-blue-50 dark:bg-blue-950/40 rounded-xl p-4">
-//                       <p className="text-xs text-blue-700 dark:text-blue-400">
-//                         Departments
-//                       </p>
-
-//                       <p className="text-2xl font-bold text-blue-700 dark:text-blue-400 mt-1">
-//                         8
-//                       </p>
-//                     </div>
-//                   </div>
-
-//                   <div className="mt-5">
-//                     <div className="flex items-center justify-between">
-//                       <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">
-//                         Employee Activity
-//                       </p>
-
-//                       <BarChart3
-//                         size={18}
-//                         className="text-green-700 dark:text-green-400"
-//                       />
-//                     </div>
-
-//                     <div className="flex items-end gap-2 h-24 mt-4">
-//                       <div className="w-full bg-green-100 rounded-t-lg h-10"></div>
-//                       <div className="w-full bg-green-200 rounded-t-lg h-16"></div>
-//                       <div className="w-full bg-green-300 rounded-t-lg h-12"></div>
-//                       <div className="w-full bg-green-400 rounded-t-lg h-20"></div>
-//                       <div className="w-full bg-green-500 rounded-t-lg h-14"></div>
-//                       <div className="w-full bg-green-600 rounded-t-lg h-24"></div>
-//                       <div className="w-full bg-green-700 rounded-t-lg h-18"></div>
-//                     </div>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//           </ScrollReveal>
-//         </div>
-//       </div>
-//     </section>
