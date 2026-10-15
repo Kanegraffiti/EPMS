@@ -1,47 +1,14 @@
-import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import ScrollReveal from "../components/ScrollReveal";
 import { Link } from "react-router-dom";
 
-import { Moon, Sun } from "lucide-react";
 
 const About = () => {
-  // Dark / Light Mode
-  const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem("epmsDarkMode") === "true";
-  });
-
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("epmsDarkMode", "true");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("epmsDarkMode", "false");
-    }
-  }, [darkMode]);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
       <Navbar />
 
-      {/* THEME TOGGLE */}
-      <button
-        type="button"
-        onClick={() => setDarkMode(!darkMode)}
-        className="fixed top-24 right-5 z-40
-                   p-2.5 rounded-full
-                   bg-white dark:bg-gray-800
-                   border border-gray-200 dark:border-gray-700
-                   text-gray-600 dark:text-gray-300
-                   hover:bg-green-50 dark:hover:bg-gray-700
-                   hover:text-green-700 dark:hover:text-green-400
-                   shadow-sm transition-all duration-200"
-        aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
-        title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
-      >
-        {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-      </button>
 
       {/* HERO SECTION */}
       <section className="bg-gradient-to-br from-green-900 via-green-800 to-green-700 text-white">
@@ -104,7 +71,7 @@ const About = () => {
                 </h2>
 
                 <p className="text-gray-600 dark:text-gray-400 mt-6 leading-relaxed">
-                  EPMS provides a centralized platform where employee
+                  EPMS provides a application where employee
                   information can be organized and accessed efficiently. Instead
                   of keeping employee records scattered across different
                   documents or systems, EPMS brings them together into one
@@ -139,7 +106,7 @@ const About = () => {
                 </h3>
 
                 <p className="text-gray-600 dark:text-gray-400 mt-3 leading-relaxed">
-                  A centralized system for viewing and managing employee
+                  A simple interface for viewing and managing employee
                   information with simplicity, speed, and organization.
                 </p>
               </div>
@@ -191,7 +158,7 @@ const About = () => {
                 </h3>
 
                 <p className="text-gray-600 dark:text-gray-400 mt-3 leading-relaxed">
-                  Keep employee records in one centralized location instead of
+                  Keep employee records in one browser instead of
                   managing information across multiple documents.
                 </p>
               </div>

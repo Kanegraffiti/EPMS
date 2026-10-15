@@ -1,3 +1,4 @@
+import EmployeeAvatar from "./EmployeeAvatar";
 import { Link } from "react-router-dom";
 
 import { Mail, Phone } from "lucide-react";
@@ -15,10 +16,7 @@ const EmployeeCard = ({ employee }) => {
 
       {/* Employee photo */}
       <div className="flex justify-center -mt-12">
-        <img
-          src={employee.image}
-          alt={employee.name}
-          className="w-24 h-24 rounded-full object-cover
+        <EmployeeAvatar employee={employee} className="w-24 h-24 rounded-full object-cover
                      border-2 border-green-600 dark:border-green-400
                      shadow-md"
         />
@@ -45,7 +43,7 @@ const EmployeeCard = ({ employee }) => {
               ${
                 employee.status === "Active"
                   ? "bg-green-100 dark:bg-green-950/60 text-green-700 dark:text-green-400"
-                  : "bg-yellow-100 dark:bg-yellow-950/60 text-yellow-700 dark:text-yellow-400"
+                  : employee.status === "On Leave" ? "bg-yellow-100 dark:bg-yellow-950/60 text-yellow-700 dark:text-yellow-400" : "bg-red-100 dark:bg-red-950/60 text-red-700 dark:text-red-400"
               }`}
           >
             ● {employee.status}
@@ -54,12 +52,12 @@ const EmployeeCard = ({ employee }) => {
 
         {/* Contact */}
         <div className="mt-5 space-y-2 text-left">
-          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+          <div className="flex items-center gap-2 text-sm break-all text-gray-500 dark:text-gray-400">
             <Mail size={16} />
             {employee.email}
           </div>
 
-          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+          <div className="flex items-center gap-2 text-sm break-all text-gray-500 dark:text-gray-400">
             <Phone size={16} />
             {employee.phone}
           </div>
